@@ -1,17 +1,19 @@
 list objects = [];
 integer winner = 0;
 string playerOne = ""; string playerTwo = "";
+integer player1CanClick = 1;
+integer player2CanClick = 0;
+
+
 
 default
 {
     state_entry()
     {
+        llSay(0, "hi");
         llListen(-16, "", NULL_KEY, "");
-       llListen(-15, "", NULL_KEY, "");
-        llListen(-20, "", NULL_KEY, "");
-        llListen(-1, "", NULL_KEY, "");   
-       
-        
+        llListen(-15, "", NULL_KEY, "");
+        llListen(-20, "", NULL_KEY, ""); 
     }
     
     listen(integer channel, string name, key id, string message)
@@ -26,12 +28,20 @@ default
                     playerTwo = message;
                     state default;
                 }
-                
-            if(channel == -1)
-                state reset;
-                
-            objects += message;
+            
+            else
+            {    
+                objects += (name + message);
+                llSay(0, name + message);
+            }
             state checkWinCondition;
+    }
+    
+    touch(integer num_detected)
+    {
+        llSay(0, "Resetting Game");
+        llSay(-1, "Reset");
+        state reset;
     }
 }
 
@@ -193,14 +203,15 @@ state win
             llSay(0, playerTwo + " is the winner!");
         
         llSay(-5, "win");        
-        llListen(-1, "", NULL_KEY, "");
     }
     
-    listen(integer channel, string name, key id, string message)
-    {   
-            if(channel == -1)
-                state reset;
+    touch(integer num_detected)
+    {
+        llSay(0, "Resetting Game");
+        llSay(-1, "Reset");
+        state reset;
     }
+    
 }
 
 state draw
@@ -208,6 +219,13 @@ state draw
     state_entry()
     {
         llSay(0, "The game ends in a draw!");
+    }
+    
+    touch(integer num_detected)
+    {
+        llSay(0, "Resetting Game");
+        llSay(-1, "Reset");
+        state reset;
     }
 }
 
