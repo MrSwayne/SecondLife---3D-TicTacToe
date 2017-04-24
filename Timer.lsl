@@ -1,6 +1,7 @@
 integer gap = 1;
 integer counter = 0;
 integer start = 0;
+integer stop = 0;
 
 default
 {
@@ -25,9 +26,7 @@ default
         else if(channel == -49)
             state reset;
         else
-        {
-            llSay(0, "The game was completed in " + counter + "seconds!");
-        }
+            llSay(0, "The game was completed in " + counter + "seconds!");  
     }
     
     timer()
@@ -41,6 +40,8 @@ state reset
     state_entry()
     {
         counter = 0;
-        start = 0;       
+        start = 0; 
+        stop = 0;
+        state default;      
     }
 }
