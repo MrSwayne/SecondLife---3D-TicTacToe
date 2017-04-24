@@ -1,30 +1,41 @@
 string playerOne;
 string playerTwo;
 integer channel = -20;
-integer id = 8;
 integer playerOneCanClick;
 integer playerTwoCanClick;
-
+integer gameIsWon = 0;
 
 
 default // default state
 {
     state_entry()
     {
-        llListen(-15, "PlayerPicker", NULL_KEY, "");
-        llListen(-16, "PlayerPicker", NULL_KEY, "");
-        llListen(-1, "Game", NULL_KEY, "");
+        llListen(-5,"Game", NULL_KEY,"");
+        
+        if(gameIsWon == 0)
+        {
+            llListen(-50, "", NULL_KEY, "");
+            llSetAlpha(0.2, ALL_SIDES);
+            llListen(-15, "PlayerPicker", NULL_KEY, "");
+            llListen(-16, "PlayerPicker", NULL_KEY, "");
+            
+            llListen(-1, "Game", NULL_KEY, "");
+        }
+        else
+        {
+            llSay(0,"Error, game is over, please click the reset button");
+        }
     }
     
     touch_start(integer num_detected)
-    
-        (-50, "Game", NULL_KEY, "");
+    {
+        llSay(-70, "start");
         
         if(playerOne == llDetectedName(0))
         {
-            if(playerOneCanClick == TRUE)
+            if(playerOneCanClick == 1)
             {
-                llSay(-60, "x");
+                llSay(-50, "x");
                 state x;
             }
             else
@@ -32,8 +43,9 @@ default // default state
         }
         else if(playerTwo == llDetectedName(0))
         {
-            if(playerTwoCanClick == TRUE)
+            if(playerTwoCanClick == 1)
                 {
+                    llSay(-50, "o");
                     state o;
                 }
             else
@@ -46,20 +58,25 @@ default // default state
     
     listen(integer channel, string name, key id, string message)
     {
+        if(channel == -5)  
+        {
+             gameIsWon = 1;
+             llSay(-89, "won");
+        }
         if (channel == -15)  playerOne = message;
         else if (channel == -16)  playerTwo = message;
         else if (channel == -1)   state reset;
-        else if (channel == -50)    
+        else if (channel == -50)
         {
-            if(message == "o")
-            {
-                playerOneCanClick = 1;
-                playerTwoCanClick = 0;
-            }
-            else if(message == "x")
+            if(message == "x")
             {
                 playerOneCanClick = 0;
                 playerTwoCanClick = 1;
+            }
+            else if(message == "o")
+            {
+                playerOneCanClick = 1;
+                playerTwoCanClick = 0;
             }
         }
     }
@@ -107,6 +124,7 @@ state reset
 {
     state_entry()
     {
+        llSay(-49, "reset");
         playerOne = "";
         playerTwo = "";
         playerOneCanClick = 1;
