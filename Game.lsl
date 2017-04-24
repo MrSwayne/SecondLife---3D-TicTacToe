@@ -10,7 +10,6 @@ default
 {
     state_entry()
     {
-        llSay(0, "hi");
         llListen(-16, "", NULL_KEY, "");
         llListen(-15, "", NULL_KEY, "");
         llListen(-20, "", NULL_KEY, ""); 
@@ -29,11 +28,9 @@ default
                     state default;
                 }
             
-            else
-            {    
+            else 
                 objects += (name + message);
-                llSay(0, name + message);
-            }
+                
             state checkWinCondition;
     }
     
