@@ -21,38 +21,39 @@ default // default state
             
             llListen(-1, "Game", NULL_KEY, "");
         }
-        else
-        {
-            llSay(0,"Error, game is over, please click the reset button");
-        }
     }
     
     touch_start(integer num_detected)
     {
-        llSay(-70, "start");
-        
-        if(playerOne == llDetectedName(0))
+        if(gameIsWon == 1)
+            llSay(0,"Error, game is over, please click the reset button :)");
+        else
         {
-            if(playerOneCanClick == 1)
+            llSay(-70, "start");
+            
+            if(playerOne == llDetectedName(0))
             {
-                llSay(-50, "x");
-                state x;
+                if(playerOneCanClick == 1)
+                {
+                    llSay(-50, "x");
+                    state x;
+                }
+                else
+                    llSay(0, "It is not your turn");
+            }
+            else if(playerTwo == llDetectedName(0))
+            {
+                if(playerTwoCanClick == 1)
+                    {
+                        llSay(-50, "o");
+                        state o;
+                    }
+                else
+                    llSay(0, "It is not your turn");
             }
             else
-                llSay(0, "It is not your turn");
+                llSay(0, "Error");    
         }
-        else if(playerTwo == llDetectedName(0))
-        {
-            if(playerTwoCanClick == 1)
-                {
-                    llSay(-50, "o");
-                    state o;
-                }
-            else
-                llSay(0, "It is not your turn");
-        }
-        else
-            llSay(0, "Error");    
     }
     
     
@@ -129,6 +130,7 @@ state reset
         playerTwo = "";
         playerOneCanClick = 1;
         playerTwoCanClick = 0;
+        gameIsWon = 0;
         
         llSetColor(<0.0,0.0,0.0>, ALL_SIDES);
         llSetAlpha(0.2, ALL_SIDES);
